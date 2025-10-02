@@ -1,0 +1,29 @@
+.searchBar {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.skillsBlock {
+  flex: 1;
+}
+
+.skillsList {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  margin-bottom: 5px;
+}
+
+.skill {
+  background-color: #ddd;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+.textSearchBlock {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}

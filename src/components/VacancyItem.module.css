@@ -1,0 +1,38 @@
+.card {
+  border: 1px solid #ddd;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+}
+
+.title {
+  font-weight: bold;
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+
+.salary,
+.experience,
+.company,
+.city,
+.skills {
+  margin: 3px 0;
+}
+
+.tag {
+  display: inline-block;
+  background: #eee;
+  padding: 2px 5px;
+  margin-bottom: 5px;
+  border-radius: 3px;
+}
+
+.buttons {
+  margin-top: 10px;
+}
+
+.buttons button {
+  margin-right: 10px;
+  padding: 5px 10px;
+  cursor: pointer;
+}

@@ -1,0 +1,50 @@
+.filtersContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.searchBox input {
+  width: 100%;
+  padding: 8px 12px;
+  font-size: 16px;
+}
+
+.leftFilters {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.skillsFilter {
+  display: flex;
+  flex-direction: column;
+}
+
+.skillsInput {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.skillTag {
+  background: #e0e0e0;
+  padding: 4px 8px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.skillTag button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.cityFilter {
+  display: flex;
+  flex-direction: column;
+}

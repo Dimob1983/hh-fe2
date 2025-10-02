@@ -1,0 +1,33 @@
+.vacancyItem {
+  border: 1px solid #ddd;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+}
+
+.vacancyHeader {
+  margin: 0 0 10px 0;
+}
+
+.vacancyInfo {
+  margin: 5px 0;
+}
+
+.vacancyButtons {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+}
+
+.vacancyButton {
+  cursor: pointer;
+  padding: 5px 10px;
+  border: none;
+  background-color: #1976d2;
+  color: white;
+  border-radius: 3px;
+}
+
+.vacancyButton:hover {
+  background-color: #155a9c;
+}
