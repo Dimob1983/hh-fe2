@@ -1,15 +1,16 @@
 import type { KeyboardEvent } from 'react';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface Props {
   skills: string[];
   setSkills: React.Dispatch<React.SetStateAction<string[]>>;
   city: string;
-  setCity: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export default function Filters({ skills, setSkills, city, setCity }: Props) {
+export default function Filters({ skills, setSkills, city }: Props) {
   const [newSkill, setNewSkill] = useState('');
+  const navigate = useNavigate();
 
   const addSkill = () => {
     if (newSkill && !skills.includes(newSkill)) {
@@ -47,11 +48,20 @@ export default function Filters({ skills, setSkills, city, setCity }: Props) {
 
       <div style={{ marginTop: '20px' }}>
         <h4>Город</h4>
-        <select value={city} onChange={e => setCity(e.target.value)}>
-          <option value="all">Все</option>
-          <option value="1">Москва</option>
-          <option value="2">Санкт-Петербург</option>
-        </select>
+        <div>
+          <button
+            style={{ fontWeight: city === 'moscow' ? 'bold' : 'normal', marginRight: '5px' }}
+            onClick={() => navigate('/vacancies/moscow')}
+          >
+            Москва
+          </button>
+          <button
+            style={{ fontWeight: city === 'petersburg' ? 'bold' : 'normal' }}
+            onClick={() => navigate('/vacancies/petersburg')}
+          >
+            Санкт-Петербург
+          </button>
+        </div>
       </div>
     </div>
   );

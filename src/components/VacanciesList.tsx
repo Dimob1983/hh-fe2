@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { getData } from '../api/getData';
 import type { HHResponse, Vacancy } from '../types';
 import Filters from './Filters';
@@ -8,36 +8,17 @@ import SearchBar from './SearchBar';
 import VacancyItem from './VacancyItem';
 
 export default function VacanciesList() {
+  const { city: cityParam } = useParams<{ city: string }>();
   const [vacancies, setVacancies] = useState<Vacancy[]>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
 
   const [skills, setSkills] = useState(['TypeScript', 'React', 'Redux']);
-  const [city, setCity] = useState('all');
   const [searchText, setSearchText] = useState('');
 
-  const [searchParams, setSearchParams] = useSearchParams();
-
-  useEffect(() => {
-    const cityParam = searchParams.get('city') || 'all';
-    const skillsParam = searchParams.get('skills')?.split(',') || ['TypeScript', 'React', 'Redux'];
-    const textParam = searchParams.get('text') || '';
-    const pageParam = parseInt(searchParams.get('page') || '1', 10);
-
-    setCity(cityParam);
-    setSkills(skillsParam);
-    setSearchText(textParam);
-    setPage(pageParam);
-  }, []);
-
-  useEffect(() => {
-    setSearchParams({
-      city,
-      skills: skills.join(','),
-      text: searchText,
-      page: page.toString(),
-    });
-  }, [city, skills, searchText, page]);
+  const cityCode = cityParam === 'moscow' ? '1'
+                 : cityParam === 'petersburg' ? '2'
+                 : undefined;
 
   const fetchVacancies = async () => {
     try {
@@ -45,7 +26,7 @@ export default function VacanciesList() {
         page: page - 1,
         per_page: 10,
         skill_set: skills,
-        area: city !== 'all' ? city : undefined,
+        area: cityCode,
         text: searchText || undefined,
       });
       setVacancies(data.items);
@@ -57,7 +38,7 @@ export default function VacanciesList() {
 
   useEffect(() => {
     fetchVacancies();
-  }, [page, skills, city, searchText]);
+  }, [page, skills, cityCode, searchText]);
 
   const handleSearchSubmit = () => {
     setPage(1);
@@ -69,8 +50,7 @@ export default function VacanciesList() {
       <Filters
         skills={skills}
         setSkills={setSkills}
-        city={city}
-        setCity={setCity}
+        city={cityParam || 'moscow'}
       />
 
       <div style={{ flex: 1 }}>
@@ -81,15 +61,12 @@ export default function VacanciesList() {
         />
 
         <h2>Список вакансий по профессии Frontend-разработчик</h2>
+        {vacancies.length === 0 && <p>Вакансии не найдены</p>}
         {vacancies.map(v => (
           <VacancyItem key={v.id} vacancy={v} />
         ))}
 
-        <Pagination
-          total={totalPages}
-          page={page}
-          onChange={setPage}
-        />
+        <Pagination total={totalPages} page={page} onChange={setPage} />
       </div>
     </div>
   );
