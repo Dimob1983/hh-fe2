@@ -3,22 +3,30 @@ import { useParams } from 'react-router-dom';
 import { getData } from '../api/getData';
 import type { HHResponse, Vacancy } from '../types';
 import Filters from './Filters';
+import NotFound from './NotFound';
 import Pagination from './Pagination';
 import SearchBar from './SearchBar';
 import VacancyItem from './VacancyItem';
 
 export default function VacanciesList() {
   const { city: cityParam } = useParams<{ city: string }>();
+
+  const validCities = ["moscow", "petersburg"];
+  const defaultCity = "moscow";
+
+  if (cityParam && !validCities.includes(cityParam)) {
+    return <NotFound />;
+  }
+
+  const city = cityParam || defaultCity;
+  const cityCode = city === "moscow" ? "1" : "2";
+
   const [vacancies, setVacancies] = useState<Vacancy[]>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
 
-  const [skills, setSkills] = useState(['TypeScript', 'React', 'Redux']);
-  const [searchText, setSearchText] = useState('');
-
-  const cityCode = cityParam === 'moscow' ? '1'
-                 : cityParam === 'petersburg' ? '2'
-                 : undefined;
+  const [skills, setSkills] = useState(["TypeScript", "React", "Redux"]);
+  const [searchText, setSearchText] = useState("");
 
   const fetchVacancies = async () => {
     try {
@@ -46,11 +54,11 @@ export default function VacanciesList() {
   };
 
   return (
-    <div style={{ display: 'flex', gap: '20px' }}>
+    <div style={{ display: "flex", gap: "20px" }}>
       <Filters
         skills={skills}
         setSkills={setSkills}
-        city={cityParam || 'moscow'}
+        city={city}
       />
 
       <div style={{ flex: 1 }}>

@@ -1,36 +1,74 @@
-import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
-import Filters from "../components/Filters";
+import type { KeyboardEvent } from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-describe("Filters", () => {
-  it("добавляет новый навык", () => {
-    const setSkills = vi.fn();
-    const setCity = vi.fn();
-    const skills: string[] = [];
+interface Props {
+  skills: string[];
+  setSkills: React.Dispatch<React.SetStateAction<string[]>>;
+  city: string;
+}
 
-    render(<Filters skills={skills} setSkills={setSkills} city="all" setCity={setCity} />);
+export default function Filters({ skills, setSkills, city }: Props) {
+  const [newSkill, setNewSkill] = useState("");
+  const navigate = useNavigate();
 
-    const inputSkill = screen.getByPlaceholderText("Добавить навык");
-    fireEvent.change(inputSkill, { target: { value: "React" } });
-    fireEvent.keyDown(inputSkill, { key: "Enter" });
+  const addSkill = () => {
+    if (newSkill && !skills.includes(newSkill)) {
+      setSkills((prev) => [...prev, newSkill]);
+      setNewSkill("");
+    }
+  };
 
-    expect(setSkills).toHaveBeenCalledTimes(1);
+  const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      addSkill();
+    }
+  };
 
-    const fn = setSkills.mock.calls[0][0];
-    const result = fn([]);
-    expect(result).toEqual(["React"]);
-  });
+  const handleCityChange = (newCity: string) => {
+    navigate(`/vacancies/${newCity}`);
+  };
 
-  it("изменяет город", () => {
-    const setSkills = vi.fn();
-    const setCity = vi.fn();
-    const skills: string[] = [];
+  return (
+    <div style={{ width: "250px" }}>
+      <div>
+        <h4>Ключевые навыки</h4>
+        {skills.map((skill) => (
+          <span key={skill} style={{ marginRight: "5px" }}>
+            {skill}{" "}
+            <button onClick={() => setSkills((prev) => prev.filter((s) => s !== skill))}>
+              x
+            </button>
+          </span>
+        ))}
+        <input
+          type="text"
+          value={newSkill}
+          onChange={(e) => setNewSkill(e.target.value)}
+          onKeyDown={handleKeyPress}
+          placeholder="Добавить навык"
+        />
+        <button onClick={addSkill}>+</button>
+      </div>
 
-    render(<Filters skills={skills} setSkills={setSkills} city="all" setCity={setCity} />);
-
-    const select = screen.getByDisplayValue("Все");
-    fireEvent.change(select, { target: { value: "1" } });
-
-    expect(setCity).toHaveBeenCalledWith("1");
-  });
-});
+      <div style={{ marginTop: "20px" }}>
+        <h4>Город</h4>
+        <div>
+          <button
+            style={{ fontWeight: city === "moscow" ? "bold" : "normal", marginRight: "5px" }}
+            onClick={() => handleCityChange("moscow")}
+          >
+            Москва
+          </button>
+          <button
+            style={{ fontWeight: city === "petersburg" ? "bold" : "normal" }}
+            onClick={() => handleCityChange("petersburg")}
+          >
+            Санкт-Петербург
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}

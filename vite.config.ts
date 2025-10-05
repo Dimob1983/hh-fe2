@@ -10,11 +10,13 @@ type MyServerOptions = {
 };
 
 export default defineConfig({
-  base: '/',
+  // base: '/',
+  base: '/hh-fe2/',
   plugins: [react()],
   server: {
     fs: {
       strict: false,
+      historyApiFallback: true,
     },
     host: '0.0.0.0',
     port: 5173,
